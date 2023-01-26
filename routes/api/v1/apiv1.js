@@ -21,7 +21,7 @@ router.get('/urls/preview', async (req, res, next) => {
         // filter meta tags for title, url, image, and description
         var filteredMeta = metaTags.filter(tag => {
             let tagProp = tag.getAttribute('property');
-            if (tagProp == 'og:title' || tagProp == 'og:url' || tagProp == 'og:image' || tagProp == 'og:description') {
+            if (tagProp == 'og:title' || tagProp == 'og:url' || tagProp == 'og:image' || tagProp == 'og:description' || 'og:locale') {
                 return true;
             } else {
                 return false;
@@ -32,12 +32,10 @@ router.get('/urls/preview', async (req, res, next) => {
         var description = '';
         var title = '';
         var image = '';
+        var locale = '';
         filteredMeta.forEach(tag => {
-            console.log(tag);
             let propTag = tag.getAttribute('property');
             let contTag = tag.getAttribute('content');
-            console.log(propTag);
-            console.log(contTag);
             if (propTag == 'og:url') {
                 url = contTag;
             } else if (propTag == 'og:title') {
@@ -46,6 +44,8 @@ router.get('/urls/preview', async (req, res, next) => {
                 description = contTag;
             } else if (propTag == 'og:image') {
                 image = contTag;
+            } else if (propTag == 'og:locale') {
+                locale = contTag;
             }
         });
 
@@ -59,35 +59,22 @@ router.get('/urls/preview', async (req, res, next) => {
         }
 
         // set preview html and send
-        /*let preview = `
-            <div style="max-width: 300px; border: solid 1px; padding: 3px; text-align: center;"> 
+        let preview = `
+            <div style="max-width: 300px; border: solid 1px; padding: 3px; text-align: center; margin: auto; width: 50%;">
                 <a href=${url}>
-                    <p><strong> 
+                    <p><strong>
                         ${title}
                     </strong></p>
                     ${image != '' ? '<img src="' + image + '" style="max-height: 200px; max-width: 270px;">' : ''}
                 </a>
                 ${description != '' ? '<p>' + description + '</p>' : ''}
+                ${locale != '' ? '<p>' + locale + '</p>' : ''}
             </div>
-        `;*/
-        let preview = '';
-        preview += '<div style="max-width: 300px; border: solid 1px; padding: 3px; text-align: center;">';
-        preview += '<a href="' + url + '">';
-        preview += '<p><strong>' + title + '</strong></p>';
-        if (image != '') {
-            preview += '<img src="' + image + '" style="max-height: 200px; max-width: 270px;">';
-        }
-        preview += '</a>';
-        if (description != '') {
-            preview += '<p>' + description + '</p>';
-        }
-        preview += '</div>';
-        res.type("html");
+        `;
+        res.type('html');
         res.send(preview);
     } catch {
-        let error = `
-            <p>There was an error loading your page, please try again</p>
-        `;
+        let error = '<div>There was an error loading your page. Please try again.</div>'
         res.type('html');
         res.send(error);
     }
