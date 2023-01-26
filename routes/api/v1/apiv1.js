@@ -19,7 +19,7 @@ router.get('/urls/preview', async (req, res, next) => {
         let metaTags = htmlPage.querySelectorAll('meta');
 
         // filter meta tags for title, url, image, and description
-        let filteredMeta = metaTags.filter(tag => {
+        var filteredMeta = metaTags.filter(tag => {
             let tagProp = tag.getAttribute('property');
             if (tagProp == 'og:title' || tagProp == 'og:url' || tagProp == 'og:image' || tagProp == 'og:description') {
                 return true;
@@ -28,44 +28,16 @@ router.get('/urls/preview', async (req, res, next) => {
             }
         });
 
-        // check if the title and url exists
-        var titleExists = false;
-        var urlExists = false;
-
-        filteredMeta.forEach(tag => {
-            if (tag.getAttribute('property') == "og:title") {
-                titleExists = true;
-            } else if (tag.getAttribute('property') == "og:url") {
-                urlExists = true;
-            }
-        });
-
-        if (!urlExists) {
-            filteredMeta.push(`
-                <meta property='og:url' content=${url} />
-            `);
-        }
-
-        if (!titleExists) {
-            let title = htmlPage.querySelector('title').innerHTML;
-            if (title == undefined) {
-                filteredMeta.push(`
-                    <meta property='og:title' content=${url} />
-                `);
-            } else {
-                filteredMeta.push(`
-                    <meta property='og:title' content=${title} />
-                `);
-            }
-        }
-
         // extract contents from page
         var description = '';
         var title = '';
         var image = '';
         filteredMeta.forEach(tag => {
+            console.log(tag);
             let propTag = tag.getAttribute('property');
             let contTag = tag.getAttribute('content');
+            console.log(propTag);
+            console.log(contTag);
             if (propTag == 'og:url') {
                 url = contTag;
             } else if (propTag == 'og:title') {
@@ -77,18 +49,39 @@ router.get('/urls/preview', async (req, res, next) => {
             }
         });
 
+        if (title == '') {
+            let titleTag = htmlPage.querySelector('title').innerHTML;
+            if (titleTag == undefined) {
+            title = url;
+            } else {
+                title = titleTag;
+            }
+        }
+
         // set preview html and send
-        let preview = `
+        /*let preview = `
             <div style="max-width: 300px; border: solid 1px; padding: 3px; text-align: center;"> 
                 <a href=${url}>
                     <p><strong> 
                         ${title}
                     </strong></p>
-                    <img src=${image} style="max-height: 200px; max-width: 270px;">
+                    ${image != '' ? '<img src="' + image + '" style="max-height: 200px; max-width: 270px;">' : ''}
                 </a>
-                <p>${description}</p>
+                ${description != '' ? '<p>' + description + '</p>' : ''}
             </div>
-        `;
+        `;*/
+        let preview = '';
+        preview += '<div style="max-width: 300px; border: solid 1px; padding: 3px; text-align: center;">';
+        preview += '<a href="' + url + '">';
+        preview += '<p><strong>' + title + '</strong></p>';
+        if (image != '') {
+            preview += '<img src="' + image + '" style="max-height: 200px; max-width: 270px;">';
+        }
+        preview += '</a>';
+        if (description != '') {
+            preview += '<p>' + description + '</p>';
+        }
+        preview += '</div>';
         res.type("html");
         res.send(preview);
     } catch {
