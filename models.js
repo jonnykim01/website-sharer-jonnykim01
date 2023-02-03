@@ -9,6 +9,7 @@ async function main() {
 
   const postSchema = new mongoose.Schema({
     url: String,
+    username: String,
     description: String,
     created_date: Date
   });

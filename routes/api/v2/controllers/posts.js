@@ -8,12 +8,13 @@ router.post('/', async (req, res, next) => {
         let date = new Date();
         const newPost = new req.models.Post({
           url: req.body.url,
+          username: req.body.username,
           description: req.body.description,
           created_date: date
         });
-    
+
         await newPost.save();
-    
+
         res.type('json');
         res.send({'status': 'success'});
     } catch(error) {
@@ -26,16 +27,15 @@ router.get('/', async (req, res, next) => {
     try {
         let previews = [];
         let allPosts = await req.models.Post.find();
-        console.log(allPosts);
-        allPosts.forEach(post => {
-            let obj = {description: post.description, htmlPreview: getURLPreview(post.url)};
+        for (let i = 0; i < allPosts.length; i++) {
+            let preview = await getURLPreview(allPosts[i].url);
+            let obj = {username: allPosts[i].username, description: allPosts[i].description, htmlPreview: preview};
             previews.push(obj);
-        });
+        }
         console.log(previews);
-        res.type('json');
-        res.send(previews);
+        res.json(previews);
     } catch(error) {
-        console.log("Error saving user: ", error);
+        console.log("Error saving posts: ", error);
         res.status(500).json({"status": "error", "error": error});
     }
 });
