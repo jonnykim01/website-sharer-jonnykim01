@@ -6,7 +6,7 @@ import sessions from 'express-session';
 import msIdExpress from 'microsoft-identity-express';
 const appSettings = {
     appCredentials: {
-        clientId:  "29dde687-a5df-431b-a833-a4507e90dd0b",
+        clientId:  "8ba918cd-43eb-48fe-a460-72f2721d6626",
         tenantId:  "f6b6dd5b-f02f-441a-99a0-162ac5060bd2",
         clientSecret:  "RcG8Q~nzbcLdzmBr4G~mon9xTRRckwXE~LzOQcY5"
     },
