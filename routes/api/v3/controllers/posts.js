@@ -12,7 +12,9 @@ router.post('/', async (req, res, next) => {
               url: req.body.url,
               username: req.session.account.username,
               description: req.body.description,
-              created_date: date
+              created_date: date,
+              likes: req.body.likes,
+              id: req.body._id
             });
 
             await newPost.save();
@@ -20,7 +22,6 @@ router.post('/', async (req, res, next) => {
 
             res.json({'status': 'success'});
         } catch(error) {
-            console.log("Error saving user: ", error);
             console.log("Error saving posts: ", error);
             res.status(500).json({"status": "error", "error": error});
         }
@@ -42,9 +43,23 @@ router.get('/', async (req, res, next) => {
 
         res.json(previews);
     } catch (error) {
-        console.log("Error saving user: ", error);
-        console.log("Error saving posts: ", error);
+        console.log("Error retrieving posts: ", error);
         res.status(500).json({"status": "error", "error": error});
+    }
+});
+
+router.post('/like', async (req, res, next) => {
+    if (req.session.isAuthenticated) {
+        try {
+            let userId = req.query.userId;
+            let userPost = await req.models.Post.find({post: userId});
+        } catch (error) {
+            console.log("Error saving likes: ", error);
+            res.status(500).json({"status": "error", "error": error});
+        }
+
+    } else {
+        res.status.json({status: "error", error: "not logged in"});
     }
 });
 
