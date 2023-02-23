@@ -11,10 +11,20 @@ async function main() {
     url: String,
     username: String,
     description: String,
+    created_date: Date,
+    likes: [String]
+  });
+
+  models.Post = mongoose.model("Post", postSchema);
+
+  const commentSchema = new mongoose.Schema({
+    username: String,
+    comment: String,
+    post: {type: mongoose.Schema.Types.ObjectId, ref: "Post"},
     created_date: Date
   });
 
-  models.Post = mongoose.model('Post', postSchema);
+  models.Comment = mongoose.model("Comment", commentSchema);
   
   console.log('mongoose models created');
 }
