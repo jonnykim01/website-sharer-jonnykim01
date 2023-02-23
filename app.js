@@ -11,7 +11,7 @@ const appSettings = {
         clientSecret:  "RcG8Q~nzbcLdzmBr4G~mon9xTRRckwXE~LzOQcY5"
     },
     authRoutes: {
-        redirect: "http://localhost:3000/redirect",//"https://website-sharer-jonnykim01.azurewebsites.net/redirect", //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
+        redirect: "https://website-sharer-jonnykim01.azurewebsites.net/redirect", //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
         error: "/error", // the wrapper will redirect to this route in case of any error.
         unauthorized: "/unauthorized" // the wrapper will redirect to this route in case of unauthorized access attempt.
     }
