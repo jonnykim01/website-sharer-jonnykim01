@@ -8,10 +8,10 @@ const appSettings = {
     appCredentials: {
         clientId:  "8ba918cd-43eb-48fe-a460-72f2721d6626",
         tenantId:  "f6b6dd5b-f02f-441a-99a0-162ac5060bd2",
-        clientSecret:  "Vhl8Q~e28SQTu3ISdLrc3jhquyGDhzx6qh1traD0"//"RcG8Q~nzbcLdzmBr4G~mon9xTRRckwXE~LzOQcY5"
+        clientSecret:  "RcG8Q~nzbcLdzmBr4G~mon9xTRRckwXE~LzOQcY5"
     },
     authRoutes: {
-        redirect: "http://localhost:3000/redirect",//"https://website-sharer-jonnykim01.azurewebsites.net/redirect", //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
+        redirect: "https://website-sharer-jonnykim01.azurewebsites.net/redirect", //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
         error: "/error", // the wrapper will redirect to this route in case of any error.
         unauthorized: "/unauthorized" // the wrapper will redirect to this route in case of unauthorized access attempt.
     }
