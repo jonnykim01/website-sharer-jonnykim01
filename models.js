@@ -25,7 +25,14 @@ async function main() {
   });
 
   models.Comment = mongoose.model("Comment", commentSchema);
+
+  const userInfoSchema = new mongoose.Schema({
+    username: String,
+    favorite_food: String
+  });
   
+  models.UserInfo = mongoose.model("UserInfo", userInfoSchema);
+
   console.log('mongoose models created');
 }
 

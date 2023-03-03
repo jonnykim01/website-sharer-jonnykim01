@@ -6,6 +6,20 @@ async function init(){
 async function saveUserInfo(){
     //TODO: do an ajax call to save whatever info you want about the user from the user table
     //see postComment() in the index.js file as an example of how to do this
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('user');
+    let favorite_food = document.getElementById('fav_food').value;
+
+    try {
+        await fetchJSON(`api/${apiVersion}/userInfo`, {
+            method: "POST",
+            body: {username: username, favorite_food: favorite_food}
+        });    
+    } catch (error) {
+        throw(error);
+    }
+    
+    loadUserInfo();
 }
 
 async function loadUserInfo(){
@@ -21,6 +35,13 @@ async function loadUserInfo(){
     }
     
     //TODO: do an ajax call to load whatever info you want about the user from the user table
+    document.getElementById("fav_food").value = "";
+    let responseJson = await fetchJSON(`api/${apiVersion}/userInfo?username=${username}`);
+    let favorite_food = responseJson[0].favorite_food;
+
+    document.getElementById('user_info_div').innerHTML = `
+        <p>Favorite Food: ${favorite_food}</p>
+    `;
 
     loadUserInfoPosts(username)
 }
